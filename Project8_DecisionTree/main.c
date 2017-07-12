@@ -37,14 +37,6 @@ typedef enum
 	FILE_ATTRIBUTE,
 	FILE_TRAINING
 }FILE_TYPE;
-/*
-typedef enum
-{
-ALL_POSITIVE,
-ALL_NEGATIVE,
-NEITHER_P_N
-}OUTCOME_STATE;
-*/
 
 typedef enum
 {
@@ -204,13 +196,6 @@ int initExample(char *buf[200][200], FILE_TYPE type)
 				strcpy(examples[i].value[j - 2].val_name, buf[i][j]);
 				examples[i].value_type_num = num - 1;
 				examples[i].value[j - 2].outcome_type_num = outcome_type_amount;
-				//printf("qqq1: %s\n",examples[i].attr_name);
-				//printf("qqq2: %s\n",examples[i].value[j-2].val_name);
-
-				//printf("qqq3: %d\n",examples[i].value_type_num);
-
-				//printf("qqq4: %d\n",examples[i].value[j-2].outcome_type_num);
-
 			}
 
 		}
@@ -231,9 +216,7 @@ int initExample(char *buf[200][200], FILE_TYPE type)
 		{
 			for (n = 0; n < attribute_amount; n++)
 			{
-
 				int index = findAttribute(buf[m][n + 1], &attr);
-
 				for (e = 0; e < outcome_type_amount; e++)
 				{
 					if (strcmp(outcome_string[e], buf[m][attribute_amount + 1]) == 0)
@@ -271,8 +254,6 @@ int initExample(char *buf[200][200], FILE_TYPE type)
 	}
 }
 
-
-
 char * deleteAttribute(Attribute exp[], int index)
 {
 	int i;
@@ -288,34 +269,6 @@ char * deleteAttribute(Attribute exp[], int index)
 		exp[i] = exp[i + 1];
 	}
 	return attr;
-}
-
-void split(char *str)
-{/*
- int i = 0;
- int j = 0;
- int head = 0;
- char temp;
- char *buf[20];
- while(str != '\0')
- {
- temp = str + head + i;
-
- if(temp = ' ')
- {
- if((temp - 1) == ' ')
- {
- i = 0;
- head++;
- continue;
- }
- memcpy(buf[j], str + head, i - 1);
- head = i + 1;
- i = -1;
- j++;
- }
- i++;
- }*/
 }
 
 int isRemoved(index)
@@ -389,6 +342,7 @@ void cmpAndDelete(char *buf[200][200], int num_of_example)
 	}
 
 }
+
 // find the error in the training data,
 // for example, there are two rows haing the same values but different classification
 void findClassError(char *buf[200][200], int num_of_example, int store[50][50]) // the third param is output
@@ -468,15 +422,10 @@ int isIrrelevantAttr(char *buf[200][200], int num_of_example, int remove_index)
 				{
 					return 0; // it's a relevant attribute.
 				}
-
 			}
-
-		}
-
-		//}			
+		}			
 	}
 	return 1;
-
 }
 
 // return the total number of the attribute
@@ -487,9 +436,7 @@ int readFile(char *path, char *buf[200][200], FILE_TYPE file_type)
 	//char *buf[200][200];
 	int n = 0;
 	int m = 0;
-
 	FILE *file = fopen(path, "r");
-
 	if (file == NULL)
 		return -1;
 	else
@@ -513,7 +460,6 @@ int readFile(char *path, char *buf[200][200], FILE_TYPE file_type)
 					//buf[n][0] = a;
 					n++;
 				}
-
 				m = 0;
 				continue;
 			}
@@ -561,7 +507,7 @@ float calEntropy(Attribute attribute, char *val_name, EXAMPLE_TYPE type)
 		return entropy;
 	}
 
-	if (type == VALUE_TYPE)
+	else if (type == VALUE_TYPE)
 	{
 		int j = 0;
 		while (strcmp(attribute.value[j].val_name, val_name) != 0)
@@ -595,8 +541,8 @@ float calEntropy(Attribute attribute, char *val_name, EXAMPLE_TYPE type)
 
 		}
 	}
-	int n;
-	for (n = 0; n < out_type_num; n++)
+	
+	for (int n = 0; n < out_type_num; n++)
 	{
 		float proportion = (float)val.outcome[n] / (float)examplesOfAttr;
 		// if proportion = 0, then log10f(0) is a large number, but 0 times any number is 0;
@@ -611,8 +557,6 @@ float calEntropy(Attribute attribute, char *val_name, EXAMPLE_TYPE type)
 		entropy = entropy + (-1) * proportion * (log10f(proportion) / log10(2));
 	}
 	return entropy;
-
-
 }
 
 //e.g. cal how many sunny in the Attr Sky.
@@ -667,7 +611,6 @@ void findAttributeNValueIndex(char *val_name, int *attr_idx, int *v_idx)
 	{
 		for (j = 0; j < examples[i].value_type_num; j++)
 		{
-
 			if (strcmp(examples[i].value[j].val_name, val_name) == 0)
 			{
 				*attr_idx = i;
@@ -676,7 +619,6 @@ void findAttributeNValueIndex(char *val_name, int *attr_idx, int *v_idx)
 			}
 		}
 	}
-
 }
 
 //return the index of Value
@@ -698,11 +640,11 @@ int findAttribute(char *val_name, Attribute *attr)
 		}
 	}
 	return index;
-
 }
 
 int calExampleAmount(int index)
-{/*
+{
+/*
  int i,j;
  while(examples[i].attr_name != attr_name)
  {
@@ -760,15 +702,6 @@ float calInfoGain(char *example_name, char *estimated_attr_name, EXAMPLE_TYPE ty
 	// need to determine whether has the attr_name in examples;
 	int m;
 	int value_out_num; // total amount of the value, e.g. how many value "sunny" in the attr "Sky"?
-					   /*
-					   for(j = 0; j < examples[i].value_type_num; j++)
-					   {
-					   for(m = 0; m < examples[i].value[j].outcome_type_num; m++)
-					   {
-					   value_out_num = value_out_num + examples[i].value[j].outcome[m];
-					   }
-					   s_value = s_value + calEntropy(examples[i].attr_name,  examples[i].value[j].val_name, ALL_ATTRIBUTES_TYPE);
-					   }*/
 	int val_amount;
 	for (m = 0; m < examples[i].value_type_num; m++)
 	{
@@ -776,7 +709,6 @@ float calInfoGain(char *example_name, char *estimated_attr_name, EXAMPLE_TYPE ty
 		float temp = (float)val_amount / (float)exmpl_num;
 		s_value = s_value + temp * calEntropy(examples[i], examples[i].value[m].val_name, VALUE_TYPE);
 	}
-
 	return s_example - s_value;
 }
 
@@ -856,8 +788,6 @@ void ID3(char *example_name, DecisionTree *root, EXAMPLE_TYPE type, int *attr_re
 		root->branch_num = 0;
 		return;
 	}
-
-
 	//give the info gain of first available attribute to the maxGain
 	float maxGain = 0.0;
 	int j;
@@ -929,7 +859,6 @@ void printDesicionTree(DecisionTree *root, int blk)
 
 	for (j = 0; j < root->branch_num; j++)
 	{
-
 		printf("= %s \n", root->branches_value[j]);
 		printDesicionTree(root->branches[j], blk + 1);
 		if (j < root->branch_num - 1)
@@ -979,29 +908,6 @@ void printDesicionTreeByLine(DecisionTree *root, char _name[10][50], int print_c
 		printDesicionTreeByLine(root->branches[j], name, count11);
 	}
 }
-/*
-void printDesicionTree(DecisionTree *tree)
-{
-int i;
-char name[60] = {'\0'};
-char temp[3] = "|  ";
-strcat(name,tree->node_name);
-if(tree->branch_num == 0)
-{
-printf(" %s\n",name);
-return;
-}
-strcat(name, " = ");
-for(i = 0; i < tree->branch_num; i++)
-{
-strcat(name, tree->branches_value[i]);
-strcat(name, "\n");
-printf("%s", name);
-printDesicionTree(tree->branches[i]);
-}
-
-}*/
-
 
 int rule_arr_num = 0;
 void createRules(DecisionTree *tree, Rule *preRule, Rule *rule)
@@ -1101,17 +1007,14 @@ void genContiAttr(char *buf[200][200])
 					/* temp = buf[j][i + 1];
 					buf[j][i + 1] = buf[m][i + 1];
 					buf[m][i + 1] = temp;*/
-
 					changeLine(buf, j, m, 6);
 				}
 			}
 		}
-		m = 0;
 		char *outcome_temp = buf[0][attribute_amount + 1];
 		int outcome_index = attribute_amount + 1;
 		float threshold[100]; //every attribute have some threshold
-
-
+		
 		m = 0;
 		for (j = 1; j < num_examples; j++)
 		{
@@ -1123,13 +1026,13 @@ void genContiAttr(char *buf[200][200])
 			}
 		}
 		attr_threshold_amount = m;// it means amount, not index
-
 		calContiValOutcome(threshold, attr_threshold_amount, buf, i, attr_name);
 		attr_count = attr_count + attr_threshold_amount;
 	}
 	attribute_amount = attr_count;
 
 }
+
 int num = 0;
 void calContiValOutcome(float threshold[100], int amount, char *buf[200][200], int attr_index, char attr_name[15][10])
 {
@@ -1187,18 +1090,6 @@ int findOutcomeIndex(char *name)
 		}
 	}
 	return -1;
-}
-
-void f(int a, int b)
-{
-	int c;
-	c = 8;
-	printf("%x\n", &c);
-	while (b > 0)
-	{
-		f(a, --b);
-		f(a, --b);
-	}
 }
 
 void calAccuracy_rule(char *buf[200][200], Rule *r)
