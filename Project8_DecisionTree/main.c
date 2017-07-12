@@ -16,13 +16,15 @@ web site.
 two data sets.
 */
 
+/*these two macros are used to determine whether using noise-elimination methods or not*/
 #define FIND_IRRELEVANT 0 
 #define FIND_CONTRADICTION 0 
+/******************************/
 
 #define NUM_ATTR_VALUE  10 // more than 'no' and 'yes', maybe the third value exists.
 #define NUM_OUTCOME  5 // the outcome can have 5 different values at most. it can be modified,
 // but need to be certain at the beiginning. because it will represent the size
-//  of an outcome[]. the type of the outcome is not sure, maybe y/n, 1/0,
+// of an outcome[]. the type of the outcome is not sure, maybe y/n, 1/0,
 // A/B/C etc.
 
 typedef enum
@@ -79,7 +81,7 @@ typedef struct
 {
 	char node_name[50];
 	char * branches_value[10];    // these two arrays must have one-to-one correspondence with the same index
-								  // it records value of every branch
+							  // it records value of every branch
 	int branch_num;                     // the number of branches belong to one attribute(one node)
 	struct DecisionTree *branches[10];
 	int true_false_num[2];  // 1 is yes, 2 is false
@@ -111,13 +113,13 @@ int attribute_amount = 0; // store the total number of attributes in training da
 char *targetAttr_majority;  // store the majority of target attribute
 							//compute the proportion of every kind of outcome while reading the file
 int training_Outcome_Proportion[NUM_OUTCOME];
-int attr_remove_index[10] = { -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 }; // store the index of being removed when using ID3
+int attr_remove_index[NUM_ATTR_VALUE] = { -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 }; // store the index of being removed when using ID3
 															   //int attr_remove_count = 0;   // +1 when remove an attribute
 int outcome_type_amount = 0;
-char *outcome_string[10];   // for example, it has two or more elements which are YES , NO. 10 means this tree might have at most 10 types of outcome
+char *outcome_string[NUM_ATTR_VALUE];   // for example, it has two or more elements which are YES , NO. 10 means this tree might have at most 10 types of outcome
 Rule *rule_array[20];
-int indexOfIrreAttr[10];
-char *IrreAttr[10];
+int indexOfIrreAttr[NUM_ATTR_VALUE];
+char *IrreAttr[NUM_ATTR_VALUE];
 int amountOfIrreAttr = 0;
 char * deleteAttribute(Attribute exp[], int index);
 
@@ -153,12 +155,6 @@ int findOutcomeIndex(char *name);
 void calAccuracy_rule(char *buf[200][200], Rule *r);
 void calAccuracy_tree(char *buf[200][200], DecisionTree *root);
 
-
-
-
-
-
-
 char * str_combine(char *a, char *b)
 {
 	char *ptr;
@@ -178,7 +174,6 @@ char * str_combine(char *a, char *b)
 
 int initExample(char *buf[200][200], FILE_TYPE type)
 {
-
 	if (type == FILE_ATTRIBUTE)
 	{
 		outcome_type_amount = atoi(buf[attribute_amount][0]) - 1;  // attribute_amount + 2 is the total number of the file, but index starts with 0 and there is a empty line;
@@ -191,20 +186,17 @@ int initExample(char *buf[200][200], FILE_TYPE type)
 			int num = atoi(buf[i][0]);
 			for (j = 2; j < num + 1; j++)  //buf[i][1] is attribute, after that, they are all values;
 			{
-
 				strcpy(examples[i].attr_name, buf[i][1]);
 				strcpy(examples[i].value[j - 2].val_name, buf[i][j]);
 				examples[i].value_type_num = num - 1;
 				examples[i].value[j - 2].outcome_type_num = outcome_type_amount;
 			}
-
 		}
 		int m;
 		for (m = 2; m < outcome_type_amount + 2; m++)
 		{
 			outcome_string[m - 2] = buf[attribute_amount][m];
 		}
-
 	}
 	else if (type == FILE_TRAINING)
 	{
@@ -337,7 +329,6 @@ void cmpAndDelete(char *buf[200][200], int num_of_example)
 					}
 				}
 			}
-
 		}
 	}
 
@@ -385,12 +376,9 @@ void findClassError(char *buf[200][200], int num_of_example, int store[50][50]) 
 				{
 					store[count][row++] = n;
 					temp[count_for_temp++] = n;
-
-					return 0; // it's a relevant attribute.
+					return; // it's a relevant attribute.
 				}
-
 			}
-
 		}
 	}
 }
@@ -538,7 +526,6 @@ float calEntropy(Attribute attribute, char *val_name, EXAMPLE_TYPE type)
 			{
 				examplesOfAttr = examplesOfAttr + val.outcome[n];
 			}
-
 		}
 	}
 	
@@ -644,24 +631,24 @@ int findAttribute(char *val_name, Attribute *attr)
 
 int calExampleAmount(int index)
 {
-/*
- int i,j;
- while(examples[i].attr_name != attr_name)
- {
- i++;
- }
+	/*
+	 int i,j;
+	 while(examples[i].attr_name != attr_name)
+	 {
+	 i++;
+	 }
 
- // need to determine whether has the attr_name in examples;
- int m;
- int value_out_num; // total amount of the value, e.g. how many value "sunny" in the attr "Sky"?
- for(j = 0; j < examples[i].value_type_num; j++)
- {
- for(m = 0; m < examples[i].value[j].outcome_type_num; m++)
- {
- value_out_num = value_out_num + examples[i].value[j].outcome[m];
- }
- s_value = s_value + calEntropy(examples[i].attr_name,  examples[i].value[j].val_name, ALL_ATTRIBUTES_TYPE);
- }*/
+	 // need to determine whether has the attr_name in examples;
+	 int m;
+	 int value_out_num; // total amount of the value, e.g. how many value "sunny" in the attr "Sky"?
+	 for(j = 0; j < examples[i].value_type_num; j++)
+	 {
+	 for(m = 0; m < examples[i].value[j].outcome_type_num; m++)
+	 {
+	 value_out_num = value_out_num + examples[i].value[j].outcome[m];
+	 }
+	 s_value = s_value + calEntropy(examples[i].attr_name,  examples[i].value[j].val_name, ALL_ATTRIBUTES_TYPE);
+	 }*/
 }
 
 // example_name may be some certain value, or it represents the whole training data.
@@ -717,17 +704,16 @@ OUTCOME_STATE searchExmpOutState(char *example_name, char *most_common_output)
 {
 	Attribute attr;
 	int i;
-
 	if (example_name == "")
 	{
 		return DIFF_OUTCOME;
 	}
-
 	int index = findAttribute(example_name, &attr);
 	Value val = attr.value[index];
 	int max = val.outcome[0];
 	int sum = max;
 	int outcome_index = 0;
+	
 	for (i = 1; i < val.outcome_type_num; i++)
 	{
 		sum = sum + val.outcome[i];
@@ -737,6 +723,7 @@ OUTCOME_STATE searchExmpOutState(char *example_name, char *most_common_output)
 			outcome_index++;
 		}
 	}
+	
 	memcpy(most_common_output, outcome_string[outcome_index], strlen(outcome_string));
 	if (max == sum) // it means all exmaples are the same outcome
 	{
@@ -770,7 +757,6 @@ void ID3(char *example_name, DecisionTree *root, EXAMPLE_TYPE type, int *attr_re
 	int attr_remove_count = attr_remove;
 	// attr_remove_temp[attr_remove_count] = attr_remove_idx;
 	memcpy(attr_remove_temp, attr_remove_idx, (attr_remove + 1) * sizeof(attr_remove_idx));
-
 	char most_common[10];
 	/* if(count == 0)
 	{
@@ -912,17 +898,13 @@ void printDesicionTreeByLine(DecisionTree *root, char _name[10][50], int print_c
 int rule_arr_num = 0;
 void createRules(DecisionTree *tree, Rule *preRule, Rule *rule)
 {
-
-
 	rule->prevRule = preRule;
 	strcpy(rule->name, tree->node_name);
-
 	if (tree->branch_num == 0)
 	{
 		rule_array[rule_arr_num] = rule;
 		rule_arr_num++;
 	}
-
 	int i;
 	for (i = 0; i < tree->branch_num; i++)
 	{
@@ -982,6 +964,7 @@ void changeLine(char *buf[200][200], int row_des, int row_source, int col_num)
 		strcpy(buf[row_des][i], temp);
 	}
 }
+
 // numbers of attribute in 'examples' will be changed according to the threshold
 void genContiAttr(char *buf[200][200])
 {
@@ -1074,7 +1057,6 @@ void calContiValOutcome(float threshold[100], int amount, char *buf[200][200], i
 			}
 			a = a + 1;
 		}
-
 	}
 	//attribute_amount = attribute_amount + m;
 }
@@ -1138,7 +1120,6 @@ void calAccuracy_tree(char *buf[200][200], DecisionTree *root)
 {
 	int i, j, m;
 	Attribute attr;
-
 	for (i = 0; i < num_examples; i++)
 	{
 
@@ -1171,29 +1152,21 @@ int main(int argc, char *argv[])
 	char *buf[200][200];
 	printf("Please choose one kind of decision tree to create. Y - discrete, N - continuous");
 	char a;
-
 	scanf("%c", &a);
-
 	if (a == 'Y')
 	{
 		char *buf_attr[100][100];
-		attribute_amount = readFile("C:\\Users\\John_\\Documents\\DecisionTreeImp\\tennis-attr.txt", buf_attr, FILE_ATTRIBUTE);
-
+		attribute_amount = readFile("./tennis-attr.txt", buf_attr, FILE_ATTRIBUTE);
 		initExample(buf_attr, FILE_ATTRIBUTE);
 		//memset(buf_att,-1,sizeof(buf));
-
-		num_examples = readFile("C:\\Users\\John_\\Documents\\DecisionTreeImp\\train2.txt", buf, FILE_TRAINING);
-
-
+		
+		num_examples = readFile("./train.txt", buf, FILE_TRAINING);
 		initExample(buf, FILE_TRAINING);
-
-		int temp[10] = { -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };;
+		int temp[10] = { -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };
+		
 		ID3("", &root, ALL_ATTRIBUTES_TYPE, temp, 0);
 		printDesicionTree(&root, 0);
-
-
 	}
-
 	return 0;
 }
 
