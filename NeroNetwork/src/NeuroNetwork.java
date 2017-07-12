@@ -21,6 +21,7 @@ public class NeuroNetwork {
 	float momentum;
 	float enableMomentum;
 	int validationSetAmount;
+	
 	public NeuroNetwork(float w1[][], float w2[][], float rate, int in, int out, int hidden, int validation_set_amount)
 	{
 		this.weights_layer1 = w1;
@@ -51,6 +52,7 @@ public class NeuroNetwork {
 			output_hidden[i] = (float) (1.0f /(1.0f + (float)Math.exp((-1.0) * output_hidden[i])));
 		}
 	}
+	
 	public void calActual_Output(float input[], float output_hidden[], float output_actual[],float weights[][])
 	{
 		float tmp = 0;
@@ -131,7 +133,6 @@ public class NeuroNetwork {
 		int iteration_count = 0; 
 		int numOfCases = ht.size();
 		
-		
 		while(iteration_count <= numOfIteration)
 		{
 			Iterator<String> it = ht.keySet().iterator();
@@ -141,7 +142,6 @@ public class NeuroNetwork {
 			{
 				int oo = 0;
 			}
-
 			if(validationSet.size() != 0)
 			{
 				float errorOftrainedWeight = calError(validationSet,this.weights_layer1,this.weights_layer2);
@@ -172,52 +172,25 @@ public class NeuroNetwork {
 						trainCaseCount++;
 						continue;
 					}
-					
 				}
-				 output_hidden = new float[this.hidden_amount];
-				 output_actual = new float[this.out_amount];
-				
-				 error_output = new float[this.out_amount];
-				 error_hidden = new float[this.hidden_amount];
-				 tmp = 0;
+				output_hidden = new float[this.hidden_amount];
+				output_actual = new float[this.out_amount];
+				error_output = new float[this.out_amount];
+				error_hidden = new float[this.hidden_amount];
+				tmp = 0;
 				 
 				String key = it.next();
 				//String key = k1.trim();
 				input = StringtoFloatArray(key,this.in_amount);
 				// calculate the output of the hidden layer
 				calHiddenOutput(input,output_hidden,this.weights_layer1);
-				/*for(int i = 0; i < hidden_amount; i++)
-				{
-					for(int j = 0; j < in_amount; j++)
-					{
-						output_hidden[i]= output_hidden[i] + weights_layer1[i][j + 1] * input[j];
-					}
-					float a = weights_layer1[i][0];
-					output_hidden[i] = output_hidden[i] + weights_layer1[i][0];
-					output_hidden[i] = (float) (1.0f /(1.0f + (float)Math.exp((-1.0) * output_hidden[i])));
-				}*/
+				
 				//calculate the output of network
-				
 				calActual_Output(input,output_hidden, output_actual,this.weights_layer2);
-				/*
-				for(int i = 0; i < out_amount; i++)
-				{
-					for(int j = 0; j < hidden_amount; j++)
-					{
-						tmp = tmp + weights_layer2[i][j + 1] * output_hidden[j];
-					}
-					tmp = tmp + weights_layer2[i][0];
-					tmp = (float) (1.0f /(1.0f + (float)Math.exp((-1.0f) * tmp)));
-					//output_actual[i]=  (float)Math.round(tmp);
-					output_actual[i]=  tmp;
-					tmp = 0;
-	
-				}*/
 				output_target = StringtoFloatArray(ht.get(key),this.out_amount);
-				//Propagate the errors backward through the network
 				
+				//Propagate the errors backward through the network
 				//For each network output unit k, calculate its error term
-	
 				for(int k = 0; k < out_amount; k++)
 				{
 					error_output[k] = output_actual[k] * (1.0f - output_actual[k]) * (output_target[k] - output_actual[k]);
@@ -234,17 +207,11 @@ public class NeuroNetwork {
 					}
 					error_hidden[a] = output_hidden[a] * (1.0f - output_hidden[a])* tmp;
 				}
-				
 				updateWeights(error_hidden, input, NETWORK_LEVEL.HIDDEN, weights_layer1, weights_layer1_prv,iteration_count);
 				updateWeights(error_output, output_hidden, NETWORK_LEVEL.OUTPUT, weights_layer2, weights_layer2_prv,iteration_count);
 	
 				trainCaseCount++;
 			}
-			
-			 //output_hidden = null;
-			 //output_actual = null;
-			 //error_output = null;
-			 //error_hidden = null;
 		}
 		return iteration_count;
 	}
