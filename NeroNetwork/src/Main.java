@@ -1,7 +1,6 @@
 import java.util.Hashtable;
 import java.util.Scanner;
 
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -9,73 +8,67 @@ public class Main {
 		//3 hidden units
 		float w1[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f,0.03f,0.06f,0.03f,-0.02f }, // first one is w0
 						{0.01f,  -0.03f,0.02f,0.04f,-0.02f,-0.04f,-0.02f,0.03f,0.05f },
-						{0.01f,  0.04f,0.03f,0.01f,0.02f,0.02f,-0.01f,-0.04f,-0.03f }
-					   };
+						{0.01f,  0.04f,0.03f,0.01f,0.02f,0.02f,-0.01f,-0.04f,-0.03f }};
 		
 		float w2[][] = { {0.01f, 0.01f,0.02f,0.03f}, {0.01f, 0.03f,0.01f,0.02f}, {0.01f, 0.02f,0.03f,0.01f}, 
 						 {0.01f, 0.01f,0.02f,0.01f}, {0.01f, 0.01f,0.03f,0.01f}, {0.01f, 0.04f,0.02f,0.03f}, 
-						 {0.01f, 0.03f,0.01f,0.02f}, {0.01f, 0.03f,0.02f,0.01f},
-					   };
+						 {0.01f, 0.03f,0.01f,0.02f}, {0.01f, 0.03f,0.02f,0.01f}};
 		
 		// 4 hidden units
 		float w3[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f,0.03f,0.06f,0.03f,-0.02f }, // first one is w0
 						{0.01f,  -0.03f,0.02f,0.04f,-0.02f,-0.04f,-0.02f,0.03f,0.05f },
 						{0.01f,  0.04f,0.03f,0.01f,0.02f,0.02f,-0.01f,-0.04f,-0.03f },
-						{0.01f,  0.02f,0.01f,0.03f,-0.02f,0.02f,-0.02f,-0.03f,0.01f }
-			   };		
+						{0.01f,  0.02f,0.01f,0.03f,-0.02f,0.02f,-0.02f,-0.03f,0.01f }};		
 		float w4[][] = { {0.01f, 0.01f,0.02f,0.03f,0.01f}, {0.01f, 0.03f,0.01f,0.02f,0.03f}, {0.01f, 0.02f,0.03f,0.01f,0.01f}, 
 				 		 {0.01f, 0.01f,0.02f,0.01f,0.02f}, {0.01f, 0.01f,0.03f,0.01f,0.01f}, {0.01f, 0.04f,0.02f,0.03f,0.02f}, 
-				 		 {0.01f, 0.03f,0.01f,0.02f,0.02f}, {0.01f, 0.03f,0.02f,0.01f,0.02f},
-			   };
+				 		 {0.01f, 0.03f,0.01f,0.02f,0.02f}, {0.01f, 0.03f,0.02f,0.01f,0.02f}};
 		
 
-		float w5[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f,0.03f,0.06f,0.03f,-0.02f }, // first one is w0
-				
-			   };
+		float w5[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f,0.03f,0.06f,0.03f,-0.02f }}; // first one is w0
 		
 		float w6[][] = { {0.01f, 0.01f}, {0.01f, 0.03f}, {0.01f, 0.02f}, 
 		 		 {0.01f, 0.01f}, {0.01f, 0.01f}, {0.01f, 0.04f},
-		 		 {0.01f, 0.03f}, {0.01f, 0.03f},
-				};
+		 		 {0.01f, 0.03f}, {0.01f, 0.03f}};
 		
 		//3 hidden units -- tennis
-				/*float w7[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f,0.03f,0.05f,0.03f,-0.02f}, // first one is w0
-								{0.01f,  -0.03f,0.02f,0.04f,-0.02f,-0.04f,-0.02f,0.03f,0.05f},
-								{0.01f,  0.04f,0.03f,0.01f,0.02f,0.02f,-0.01f,-0.04f,-0.03f},
-								{0.01f,  0.04f,0.01f,0.01f,0.03f,-0.02f,-0.01f,-0.04f,0.03f}
-							   };*/
-				float w7[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f}, // first one is w0
-						{0.01f,  -0.03f,0.02f,0.04f,-0.02f},
-						{0.01f,  0.04f,0.03f,0.01f,0.02f}
-					   };
-				//tennis one output
-				float w8[][] = { {0.01f, 0.01f,0.02f,0.03f}};
-				
-				float w9[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f}, // first one is w0
-						{0.01f,  -0.03f,0.02f,0.04f,-0.02f},
-						{0.01f,  0.04f,0.03f,0.01f,0.02f},
-						{0.01f,  0.04f,0.03f,0.01f,0.02f},
-						{0.01f,  0.04f,0.03f,0.01f,0.02f},
-						{0.01f,  0.04f,0.03f,0.01f,0.02f},
-					   };
-				//tennis one output
-				float w10[][] = { {0.01f, 0.01f,0.02f,0.03f,0.01f,0.03f,0.01f},
-						{0.01f, 0.01f,0.02f,0.03f,0.02f,0.03f,0.02f},
-						{0.01f, 0.01f,0.02f,0.03f,0.03f,0.03f,0.02f}};
+		/*float w7[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f,0.03f,0.05f,0.03f,-0.02f}, // first one is w0
+						{0.01f,  -0.03f,0.02f,0.04f,-0.02f,-0.04f,-0.02f,0.03f,0.05f},
+						{0.01f,  0.04f,0.03f,0.01f,0.02f,0.02f,-0.01f,-0.04f,-0.03f},
+						{0.01f,  0.04f,0.01f,0.01f,0.03f,-0.02f,-0.01f,-0.04f,0.03f}
+					   };*/
+		float w7[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f}, // first one is w0
+				{0.01f,  -0.03f,0.02f,0.04f,-0.02f},
+				{0.01f,  0.04f,0.03f,0.01f,0.02f}};
+		//tennis one output
+		float w8[][] = { {0.01f, 0.01f,0.02f,0.03f}};
+
+		float w9[][] = {{0.01f,  -0.04f,0.04f,-0.05f,0.01f}, // first one is w0
+				{0.01f,  -0.03f,0.02f,0.04f,-0.02f},
+				{0.01f,  0.04f,0.03f,0.01f,0.02f},
+				{0.01f,  0.04f,0.03f,0.01f,0.02f},
+				{0.01f,  0.04f,0.03f,0.01f,0.02f},
+				{0.01f,  0.04f,0.03f,0.01f,0.02f}};
+		//tennis one output
+		float w10[][] = { {0.01f, 0.01f,0.02f,0.03f,0.01f,0.03f,0.01f},
+				{0.01f, 0.01f,0.02f,0.03f,0.02f,0.03f,0.02f},
+				{0.01f, 0.01f,0.02f,0.03f,0.03f,0.03f,0.02f}};
 				
 		// read files
-				String fn_id_attr = "identity-attr.txt";
-				String fn_id_train = "identity-train.txt";
-				String fn_ten_attr = "tennis-attr.txt";
-				String fn_ten_train = "tennis-train.txt";
-				String fn_ten_test = "tennis-test.txt";
-				String fn_iris_train = "iris-train.txt";
-				String fn_iris_test = "iris-test.txt";
+		String fn_id_attr = "identity-attr.txt";
+		String fn_id_train = "identity-train.txt";
+		String fn_ten_attr = "tennis-attr.txt";
+		String fn_ten_train = "tennis-train.txt";
+		String fn_ten_test = "tennis-test.txt";
+		String fn_iris_train = "iris-train.txt";
+		String fn_iris_test = "iris-test.txt";
+		
 		FileOperation fileOper = new FileOperation();
 		int attr_amount[] = null;
 		Hashtable<String,String> ht = new Hashtable<String,String>();
+		
 		Scanner scanner=new Scanner(System.in);
-		while(true) 
+		boolean runningFlag = true;
+		while(runningFlag) 
 		{
 			System.out.print("Please input a number to learning and test! \n");
 			System.out.print("After executing one task, please re-run the program again.\n");
@@ -87,8 +80,9 @@ public class Main {
 			System.out.print("6: Iris  (Test data accuracy)\n");
 			System.out.print("7: Iris Noisy (0% - 20%)\n");
 			System.out.print("8: Iris Noisy (0% - 20%) Using Validation Set\n");
+			System.out.print("9: EXIT\n");
 			
-			 int i=scanner.nextInt();
+			int i=scanner.nextInt();
 			if(i == 1)
 			{
 				//attr_amount = fileOper.readAttribute(fn_id_attr);
@@ -182,30 +176,8 @@ public class Main {
 					neuroNet_iris.testOutput(ht,false);
 				//}
 			}
-			
-			
-			
-			// tennis training
-			{
-				//ht = fileOper.readTennisTraningData(fn3, fn4);
-			}
-			//iris training
-			{
-				//ht = fileOper.readIrisTraningData(fn5);
-				//fileOper.corruptIrisTrainingSet(ht,0.14f);
-	
-			}
-			
-			//1 hidden units
-			//NeuroNetwork neuroNet3 = new NeuroNetwork(w5,w6,0.1f,8,8,1,0);
-	
-			//3 hidden units for "identity" training
-			
-			
-			
-			
-			//start to learn
-			//initialize Ws of every layer.
+			else if(i == 9)
+				runningFlag = false;
 			
 		}
 	}
