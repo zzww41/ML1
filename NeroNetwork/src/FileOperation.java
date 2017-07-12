@@ -8,19 +8,15 @@ import java.util.Iterator;
 
 public class FileOperation 
 {
-
 	public int[] readAttribute(String fn)
 	{
 		int input_count = 0;
 		int output_count = 0;
 		int result[] = {0,0};
 		File f = new File(fn);
-		
 		String temp;
-		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(f));
-
 			while((temp = reader.readLine()) != null)
 			{ 
 				if(temp.equals(""))
@@ -114,9 +110,7 @@ public class FileOperation
 		
 		return attr_value;
 	}
-	
-	
-	
+
 	public Hashtable<String, String> readTennisData(String fn1,String fn2)
 	{
 		String attr_values[][] = readTennisAttribute(fn1);
@@ -126,44 +120,39 @@ public class FileOperation
 		String values[];
 		StringBuffer sb = null;
 		int counter = 0;
-		
-			BufferedReader reader;
-			try {
-				reader = new BufferedReader(new FileReader(f));
-			
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(f));
 
-				while((temp = reader.readLine()) != null)
-				{ 
-					sb = new StringBuffer();
-					values = temp.split(" ");
-					for(int i = 0; i < values.length - 1; i++)
+			while((temp = reader.readLine()) != null)
+			{ 
+				sb = new StringBuffer();
+				values = temp.split(" ");
+				for(int i = 0; i < values.length - 1; i++)
+				{
+					for(int j = 1; j <= attr_values[i].length - 1; j++)
 					{
-						for(int j = 1; j <= attr_values[i].length - 1; j++)
+						if(attr_values[i][j].equals(values[i]))
 						{
-							if(attr_values[i][j].equals(values[i]))
-							{
-								sb.append(transfer(attr_values[i].length - 1,j - 1));
-								
-							}
+							sb.append(transfer(attr_values[i].length - 1,j - 1));
+
 						}
 					}
-					
-					if(values[values.length - 1].equals("No"))
-						ht.put(sb.toString(), "0 ");
-					else if(values[values.length - 1].equals("Yes"))
-						ht.put(sb.toString(), "1 ");
-					else
-						ht.put(sb.toString(), "0 ");
-					
-					sb = null;
 				}
+				if(values[values.length - 1].equals("No"))
+					ht.put(sb.toString(), "0 ");
+				else if(values[values.length - 1].equals("Yes"))
+					ht.put(sb.toString(), "1 ");
+				else
+					ht.put(sb.toString(), "0 ");
+				sb = null;
 			}
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-	}
-			return ht;
-			
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ht;	
 	}
 	
 	public Hashtable<String, String> readIrisData(String fn2)
@@ -175,40 +164,38 @@ public class FileOperation
 		StringBuffer sb = null;
 		int counter = 0;
 		
-			BufferedReader reader;
-			try {
-				reader = new BufferedReader(new FileReader(f));
-			
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(f));
 
-				while((temp = reader.readLine()) != null)
-				{ 
-					sb = new StringBuffer();
-					values = temp.split(" ");
-					for(int i = 0; i < values.length - 1; i++)
-					{
-						sb.append(values[i]);
-						sb.append(" ");
-					}
-					
-					
-					if(values[values.length - 1].equals("Iris-setosa"))
-						ht.put(sb.toString(), "0 0 1");
-					else if(values[values.length - 1].equals("Iris-versicolor"))
-						ht.put(sb.toString(), "1 0 0");
-					else if(values[values.length - 1].equals("Iris-virginica"))
-						ht.put(sb.toString(), "0 1 0");
-					
-					sb = null;
+
+			while((temp = reader.readLine()) != null)
+			{ 
+				sb = new StringBuffer();
+				values = temp.split(" ");
+				for(int i = 0; i < values.length - 1; i++)
+				{
+					sb.append(values[i]);
+					sb.append(" ");
 				}
+
+
+				if(values[values.length - 1].equals("Iris-setosa"))
+					ht.put(sb.toString(), "0 0 1");
+				else if(values[values.length - 1].equals("Iris-versicolor"))
+					ht.put(sb.toString(), "1 0 0");
+				else if(values[values.length - 1].equals("Iris-virginica"))
+					ht.put(sb.toString(), "0 1 0");
+
+				sb = null;
 			}
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ht;	
 	}
-			return ht;
-			
-	}
-	
 	
 	public StringBuffer transfer(int total, int index)
 	{
@@ -217,28 +204,6 @@ public class FileOperation
 		String temp = String.valueOf(r);
 		sb.append(temp);
 		sb.append(" ");
-		/*
-		if(total == 2)
-		{
-			if(index == 0)
-			{
-				sb.append("1 ");
-			}
-			else
-				sb.append("0 ");
-			return sb;
-		}
-		
-		for(int i = 0; i < total; i++)
-		{
-			if(i != index)
-				sb.append("0");
-			else
-				sb.append("1");
-			
-			sb.append(" ");
-				
-		}*/
 		return sb;
 	}
 	
@@ -286,6 +251,5 @@ public class FileOperation
 	public Hashtable<String, String> readDiscrete(String fn)
 	{
 		return null; 
-	
 	}
 }
